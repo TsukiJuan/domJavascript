@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrador de Tareas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #formulario {
+            margin-bottom: 20px;
+        }
+        #listaTareas {
+            list-style-type: none;
+            padding: 0;
+        }
+        #listaTareas li {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Administrador de Tareas</h1>
+
+    <div id="formulario">
+        <input type="text" id="nombreTarea" placeholder="Nombre de la tarea" required>
+        <input type="text" id="personaAsignada" placeholder="Persona asignada" required>
+        <button id="btnAgregar">Agregar Tarea</button>
+    </div>
+
+    <ul id="listaTareas"></ul>
+
+    <script>
+        class AdministradorDeTareas {
+    constructor() {
+        this.tareas = [];
+        this.listaTareas = document.getElementById('listaTareas'); // Asegúrate de tener un elemento con este ID en tu HTML
+    }
+
+    agregarTarea(nombre, persona) {
+        const tarea = { nombre, persona };
+        this.tareas.push(tarea);
+        this.renderizarTareas();
+    }
+
+    modificarTarea(index, nuevoNombre, nuevaPersona) {
+        if (this.tareas[index]) {
+            this.tareas[index].nombre = nuevoNombre;
+            this.tareas[index].persona = nuevaPersona;
+            this.renderizarTareas();
+        } else {
+            console.error('Tarea no encontrada.');
+        }
+    }
+
+    eliminarTarea(index) {
+        if (this.tareas[index]) {
+            this.tareas.splice(index, 1);
+            this.renderizarTareas();
+        } else {
+            console.error('Tarea no encontrada.');
+        }
+    }
+
+    renderizarTareas() {
+        this.listaTareas.innerHTML = ''; // Limpiar la lista actual
+        this.tareas.forEach((tarea, index) => {
+            const li = document.createElement('li');
+            li.textContent = `${tarea.nombre} - Asignado a: ${tarea.persona}`;
+            
+            const btnEditar = document.createElement('button');
+            btnEditar.textContent = 'Editar';
+            btnEditar.onclick = () => this.editarTarea(index);
+            
+            const btnEliminar = document.createElement('button');
+            btnEliminar.textContent = 'Eliminar';
+            btnEliminar.onclick = () => this.eliminarTarea(index);
+            
+            li.appendChild(btnEditar);
+            li.appendChild(btnEliminar);
+            this.listaTareas.appendChild(li);
+        });
+    }
+
+    editarTarea(index) {
+        const nuevaNombre = prompt("Ingrese el nuevo nombre de la tarea:");
+        const nuevaPersona = prompt("Ingrese la nueva persona asignada:");
+        if (nuevaNombre && nuevaPersona) {
+            this.modificarTarea(index, nuevaNombre, nuevaPersona);
+        }
+    }
+}
+
+// Uso
+const adminTareas = new AdministradorDeTareas();
+
+// Ejemplo de agregar tareas
+adminTareas.agregarTarea("Completar proyecto", "Juan");
+adminTareas.agregarTarea("Reunión de equipo", "María");
+
+document.addEventListener('DOMContentLoaded', () => {
+    const adminTareas = new AdministradorDeTareas();
+
+    document.getElementById('btnAgregar').onclick = function() {
+        const nombre = document.getElementById('nombreTarea').value;
+        const persona = document.getElementById('personaAsignada').value;
+
+        if (nombre && persona) {
+            adminTareas.agregarTarea(nombre, persona);
+            document.getElementById('nombreTarea').value = ''; // Limpiar campo
+            document.getElementById('personaAsignada').value = ''; // Limpiar campo
+        } else {
+            alert('Por favor, complete todos los campos.');
+        }
+    };
+});
+    </script>
+</body>
+</html>
