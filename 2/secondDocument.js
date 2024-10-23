@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
         this.listaElement.appendChild(nuevaTarea);
       }
     }
-  
     const miListaTareas = new ListaTareas();
   
     // Seleccionar el botón existente para agregar tareas
